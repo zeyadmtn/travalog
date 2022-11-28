@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Log extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'description',
+        'date',
+        'country',
+        'city',
+        // 'images'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

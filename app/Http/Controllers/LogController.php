@@ -14,7 +14,14 @@ class LogController extends Controller
      */
     public function index()
     {
-        return 'hello world';
+        return view('create-log', [
+            'logs' => Log::with('user')->latest()->get(),
+        ]);
+    }
+
+    public function viewMyLogs()
+    {
+        return view('my-logs');
     }
 
     /**
@@ -35,7 +42,17 @@ class LogController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'date' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+        ]);
+        
+        $request->user()->logs()->create($validated);
+
+        return redirect(route('logs.viewMyLogs'));
     }
 
     /**

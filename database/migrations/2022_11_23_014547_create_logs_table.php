@@ -16,6 +16,12 @@ return new class extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('title');
+            $table->string('description');
+            $table->string('date');
+            $table->string('country');
+            $table->string('city');
         });
     }
 

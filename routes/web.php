@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
 
 
 Route::resource('logs', LogController::class)
-->only(['index', 'store'])
+->only(['index', 'store', 'viewMyLogs']) 
 ->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
