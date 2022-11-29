@@ -13,8 +13,8 @@
 </head>
 
 <body class="antialiased">
-    <div class="relative flex items-top justify-center min-h-screen bg-white sm:items-center py-4 sm:pt-0">
-        <x-navbar />
+    <x-navbar />
+    <div class="relative items-top justify-center min-h-screen bg-white sm:items-center py-4 sm:pt-0">
         <main class="h-auto w-3/4 bg-lime-100 shadow-2xl">
             <div class="text-3xl text-center bg-red-200 w-full h-1/6 p-5">
                 Community Travel Logs

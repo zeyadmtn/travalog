@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Log;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LogController extends Controller
@@ -21,7 +22,11 @@ class LogController extends Controller
 
     public function viewMyLogs()
     {
-        return view('my-logs');
+        $currentUserId = auth()->user()->id;
+        
+        return view('my-logs', [
+            'logs' => Log::with('user')->where('user_id', '=', $currentUserId)->latest()->get(),
+        ]);    
     }
 
     /**
@@ -52,7 +57,7 @@ class LogController extends Controller
         
         $request->user()->logs()->create($validated);
 
-        return redirect(route('logs.viewMyLogs'));
+        return redirect('/my-logs');
     }
 
     /**
@@ -97,6 +102,10 @@ class LogController extends Controller
      */
     public function destroy(Log $log)
     {
-        //
+        $this->authorize('delete', $log);
+        
+        $log->delete();
+
+        return redirect('/my-logs');
     }
 }

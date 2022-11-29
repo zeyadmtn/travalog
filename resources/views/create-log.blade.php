@@ -39,8 +39,17 @@
 
                 <input type="submit" id="submit" class="block w-1/4 bg-lime-600 text-white mt-5 rounded-md shadow-sm m-auto h-10"></br>
             </form>
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div><br />
+            @endif
         </div>
-<!-- 
+        <!-- 
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
             @foreach ($logs as $log)
             <div class="p-6 flex space-x-2">
