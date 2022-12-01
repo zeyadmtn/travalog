@@ -2,7 +2,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Create New Log</title>
+    <title>My Logs</title>
 
     <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -11,9 +11,15 @@
 
 <body>
     <x-navbar />
-    <div class="mt-5 flex flex-col ">
+    <div class="text-xl text-center bg-teal-400 text-white w-5/6 m-auto mt-5 mb-5 rounded-xl shadow-md p-2">
+        <a href="{{route('logs.index')}}" class="w-full z-10">
+            Add Travel Log
+        </a>
+    </div>
+    @if (count($logs) > 0)
+    <div class="mt-5 flex flex-col">
         @foreach ($logs as $log)
-        <div class="bg-teal-100 w-5/6 rounded-xl p-10 shadow-lg h-auto m-auto mb-5 flex flex-col justify-between">
+        <div class="bg-teal-50 w-5/6 rounded-xl p-10 shadow-lg h-auto m-auto mb-5 flex flex-col ">
             <div class="ml-auto -mt-5 mb-3">
                 @if ($log->user->is(auth()->user()))
                 <x-dropdown>
@@ -40,21 +46,28 @@
                 @endif
             </div>
 
-            <div class="flex flex-row justify-between">
-                <div>
-                    <p class="mr-auto text-3xl font-bold text-gray-900 mb-5">{{ $log->title }}</p>
-                    <p class="mr-auto  text-gray-900">{{ $log->description }}</p>
-
+            <div class="flex justify-between">
+                <div class="w-8/12">
+                    <p class="text-3xl font-bold text-gray-900 mb-5">{{ $log->title }}</p>
                 </div>
-                <div>
-
+                <div class="ml-5">
                     <span class="text-gray-800">{{ $log->user->name }}</span>
                     <small class="ml-2 text-sm text-gray-600">{{ $log->created_at->format('j M Y, g:i a') }}</small></br>
                     <span class="text-gray-800 text-right italic">{{ $log->country }}, {{ $log->city}}</span>
                 </div>
             </div>
+            <span class="text-gray-900 h-auto text-justify mt-10">{{ $log->description }}</span>
+            <div class="flex flex-row grow flex-wrap w-full mt-10">
+                @foreach ($log->images as $image)
+                <img src={{ asset("images/$image") }} alt="image" class="h-48 w-auto mx-10 mb-5">
+                @endforeach
+            </div>
+
         </div>
     </div>
     @endforeach
     </div>
+    @else
+    <p>No Logs found</p>
+    @endif
 </body>

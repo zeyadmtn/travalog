@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Log;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,7 +17,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $logs = Log::with('user')->latest()->get();
+    info(gettype(unserialize(base64_decode($logs[0]->images))));
+
+    foreach ($logs as $log) {
+        $log->images = unserialize(base64_decode($log->images));
+    }
+
+    // dd(gettype($logs[0]->images));
+
+    return view('welcome', [
+        'logs' => $logs,
+    ]);
 });
 
 Route::get('/dashboard', function () {
@@ -35,5 +48,7 @@ Route::resource('logs', LogController::class)
 
 Route::get('/my-logs', [LogController::class, 'viewMyLogs'])
     ->middleware(['auth', 'verified']);
+
+Route::post('image-upload', 'ImageController@imageUploadPost');
 
 require __DIR__ . '/auth.php';

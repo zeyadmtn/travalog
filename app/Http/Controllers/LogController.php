@@ -23,10 +23,17 @@ class LogController extends Controller
     public function viewMyLogs()
     {
         $currentUserId = auth()->user()->id;
-        
+
+        $logs = Log::with('user')->where('user_id', '=', $currentUserId)->latest()->get();
+        info(gettype(unserialize(base64_decode($logs[0]->images))));
+
+        foreach ($logs as $log) {
+            $log->images = unserialize(base64_decode($log->images));
+        }
+
         return view('my-logs', [
-            'logs' => Log::with('user')->where('user_id', '=', $currentUserId)->latest()->get(),
-        ]);    
+            'logs' => $logs,
+        ]);
     }
 
     /**
@@ -49,12 +56,27 @@ class LogController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'description' => 'required|string',
             'date' => 'required|string|max:255',
             'country' => 'required|string|max:255',
             'city' => 'required|string|max:255',
+            'images' => 'required|distinct|min:1'
         ]);
-        
+
+        $files = $request->file('images');
+        $fileNames = [];
+
+        for ($i = 0; $i < count($files); $i++) {
+            $imageName = time() . $i . '.' . $files[$i]->getClientOriginalExtension();
+            $files[$i]->move(public_path('images'), $imageName);
+            Array_push($fileNames, $imageName);
+        }
+
+        $images = base64_encode(serialize($fileNames));
+
+        $validated['images'] = $images;
+
+
         $request->user()->logs()->create($validated);
 
         return redirect('/my-logs');
@@ -103,7 +125,7 @@ class LogController extends Controller
     public function destroy(Log $log)
     {
         $this->authorize('delete', $log);
-        
+
         $log->delete();
 
         return redirect('/my-logs');
