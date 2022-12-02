@@ -76,7 +76,7 @@
             @endforeach
     </div>
     @else
-    <p>No Logs found</p>
+    <div class="text-center text-teal-900 mt-36 text-2xl">You have no logs at the moment! :(</div>
     @endif
     </main>
     </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Log;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Igaster\LaravelCities\Geo;
 
 class LogController extends Controller
 {
@@ -25,7 +26,6 @@ class LogController extends Controller
         $currentUserId = auth()->user()->id;
 
         $logs = Log::with('user')->where('user_id', '=', $currentUserId)->latest()->get();
-        info(gettype(unserialize(base64_decode($logs[0]->images))));
 
         foreach ($logs as $log) {
             $log->images = unserialize(base64_decode($log->images));
@@ -54,6 +54,8 @@ class LogController extends Controller
      */
     public function store(Request $request)
     {
+        
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',

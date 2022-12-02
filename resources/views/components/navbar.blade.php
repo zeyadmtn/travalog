@@ -1,5 +1,7 @@
         <navbar class="top-0 right-0 px-6 py-4 bg-teal-800 w-full flex flex-row justify-between">
-            <img src={{ asset('images/dropdown-menu.png')}} alt="dropdown_icon" class="h-auto w-7">
+            <a href="{{ url('/my-logs')}}">
+                <img src={{ asset('images/logs-icon.png')}} alt="dropdown_icon" class="h-auto w-7">
+            </a>
             <a href={{ url('/') }} class="text-2xl text-white ml-16">TravaLog</a>
             <div class="">
                 @if (Route::has('login'))

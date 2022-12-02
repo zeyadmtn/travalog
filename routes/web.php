@@ -18,8 +18,6 @@ use App\Models\Log;
 
 Route::get('/', function () {
     $logs = Log::with('user')->latest()->get();
-    info(gettype(unserialize(base64_decode($logs[0]->images))));
-
     foreach ($logs as $log) {
         $log->images = unserialize(base64_decode($log->images));
     }
